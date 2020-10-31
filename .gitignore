@@ -150,3 +150,5 @@ crashlytics-build.properties
 fabric.properties
 
 blog/db.sqlite3
+blog/db.sqlite3-journal
+blog/api/migrations
