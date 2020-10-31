@@ -14,8 +14,9 @@ class Blog(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    content = models.models.TextField()
+    content = models.TextField()
     date_create = models.DateTimeField(default=timezone.now)
+    images = models.ImageField(upload_to='images/', blank=True, null=True)
     category = models.ForeignKey(
         Category, on_delete=models.DO_NOTHING)
-    date_updated = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
