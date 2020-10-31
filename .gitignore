@@ -142,10 +142,11 @@ pip-selfcheck.json
 
 # JIRA plugin
 atlassian-ide-plugin.xml
-
+blog/db.sqlite3
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+blog/db.sqlite3
