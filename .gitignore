@@ -54,6 +54,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+blog/db.sqlite3
+blog/api/migrations/*
 
 # Flask stuff:
 instance/
@@ -142,10 +144,13 @@ pip-selfcheck.json
 
 # JIRA plugin
 atlassian-ide-plugin.xml
-
+blog/db.sqlite3
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+blog/db.sqlite3
+blog/db.sqlite3-journal
+blog/api/migrations
