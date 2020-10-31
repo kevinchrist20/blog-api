@@ -23,18 +23,16 @@ def index(req):
 
 @csrf_exempt
 def create_post(request):
-    try:
-        if request.method == 'POST':
-            serializer = PostSerializer(data=request.data)
+    if request.method == 'POST':
+        serializer = PostSerializer(data=request.data)
 
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    except Blog.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+  
 
 
 @csrf_exempt
