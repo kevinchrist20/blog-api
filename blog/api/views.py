@@ -1,10 +1,13 @@
-from django.http import JsonResponse, Http404
+from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.decorators import (api_view, authentication_classes,
+                                       permission_classes)
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Blog, Category
 from .serializers import CategorySerializer, PostSerializer
@@ -19,7 +22,6 @@ def index(req):
     posts = Blog.objects.all()
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data, safe=False)
-
 
 
 class Categories(APIView):
@@ -44,6 +46,7 @@ class CategoryDetail(APIView):
     """
     Read, delete or update a category.
     """
+
     def get_object(self, pk):
         try:
             return Category.objects.get(pk=pk)
@@ -68,8 +71,12 @@ class CategoryDetail(APIView):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 @csrf_exempt
-def create_post(request):
+@api_view(['GET', 'POST'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def posts(request):
     if request.method == 'POST':
         serializer = PostSerializer(data=request.data)
 
@@ -79,8 +86,15 @@ def create_post(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    blogs = Blog.objects.all()
+    serializer = PostSerializer(blogs, many=True)
+    return Response(serializer.data)
+
 
 @csrf_exempt
+@api_view(['POST', 'GET', 'PUT', 'DELETE'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def post_detail(request, pk):
     """
     Retrieve, update or delete a post.
@@ -88,7 +102,7 @@ def post_detail(request, pk):
     try:
         post = Blog.objects.get(pk=pk)
     except Blog.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = PostSerializer(post)
@@ -107,4 +121,3 @@ def post_detail(request, pk):
     elif request.method == 'DELETE':
         post.delete()
         return Response(status=HTTP_204_NO_CONTENT)
-      
